@@ -1,23 +1,26 @@
 <script lang="ts" setup>
-const modelValue = defineModel<string>();
+const modelValue = defineModel<string | boolean>();
+const otherValue = defineModel<string>('otherValue');
 
 const props = defineProps<{
   label: string;
   type: string;
+  required: boolean;
 }>();
 
 const { data } = await useLazyFetch('/api/services');
-const otherValue = ref<string>();
 </script>
 
 <template>
-  <div v-if="['text', 'password'].includes(props.type)">
-    <label>{{ label }}:</label>
+  <div v-if="['text', 'password', 'date'].includes(props.type) && typeof modelValue === 'string'">
+    <label
+      >{{ label }}: <span v-if="required" class="text-red-600">*</span></label
+    >
     <UiInput v-model="modelValue" :type />
   </div>
-  <div v-else-if="['select'].includes(props.type)" class="space-y-3">
+  <div v-else-if="['select'].includes(props.type) && typeof modelValue === 'string'" class="space-y-3">
     <div>
-      <label>{{ label }}:</label>
+      <label> {{ label }}: <span v-if="required">*</span> </label>
       <UiSelect v-model="modelValue">
         <UiSelectTrigger>
           <UiSelectValue placeholder="Please select a service" />
@@ -39,5 +42,13 @@ const otherValue = ref<string>();
       <label>Other:</label>
       <UiInput v-model="otherValue" />
     </div>
+  </div>
+  <div
+    v-else-if="
+      ['checkbox'].includes(props.type) && typeof modelValue === 'boolean'
+    "
+  >
+    <UiCheckbox v-model:checked="modelValue" />
+    <label class="ml-2">{{ label }}</label>
   </div>
 </template>
