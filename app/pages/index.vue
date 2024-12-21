@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useVuelidate } from '@vuelidate/core';
-import { minLength, required, email } from '@vuelidate/validators';
+import { minLength, required, email, sameAs } from '@vuelidate/validators';
 
 type formType = Record<string, string | boolean>;
 const form = ref<formType>({
@@ -21,10 +21,12 @@ async function submit() {
       form.value.service === 'other' ? otherValue.value : form.value.service
   };
   await v$.value.$validate();
-  console.log(v$.value)
+  console.log(v$.value);
 
   console.log(payload);
-  // navigateTo('/submitted');
+  if (!v$.value.$invalid) {
+    navigateTo('/submitted');
+  }
 }
 
 const { data } = await useFetch('/api/form-fields');
@@ -37,10 +39,15 @@ const rules = computed(() => ({
   email: {
     required,
     email
-  }
+  },
+  password: {
+    required,
+    minLength: minLength(8)
+  },
+  terms_and_conditions: { sameAs: sameAs(() => true) }
 }));
 
-const v$ = useVuelidate();
+const v$ = useVuelidate(rules, form.value);
 </script>
 
 <template>
@@ -48,7 +55,7 @@ const v$ = useVuelidate();
     <!-- Todo: Heading Goes Here-->
     Some Heading
     <div class="flex w-[65%] flex-col items-center justify-center border">
-      <form class="space-y-3" @submit.prevent="submit">
+      <form class="space-y-3" novalidate @submit.prevent="submit">
         <FormField
           v-for="field in data"
           :key="field.name"
@@ -57,6 +64,7 @@ const v$ = useVuelidate();
           :label="field.label"
           :type="field.type"
           :required="field.required"
+          :error="v$[field.name]?.$errors[0]?.$message"
         />
       </form>
       <UiButton class="self-start" @click="submit">Submit</UiButton>
