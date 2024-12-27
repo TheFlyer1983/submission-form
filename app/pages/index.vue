@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { useVuelidate } from '@vuelidate/core';
-import { minLength, required, email, sameAs } from '@vuelidate/validators';
+import type { FormField, FormType } from '~~/shared/types';
 
-type formType = Record<string, string | boolean>;
-const form = ref<formType>({
+const form = ref<FormType>({
   name: '',
   email: '',
   password: '',
   date_of_birth: '',
   services: '',
-  other: '',
+  services_other: '',
   terms_and_conditions: false
 });
 const otherValue = ref<string>();
@@ -21,7 +20,6 @@ async function submit() {
       form.value.service === 'other' ? otherValue.value : form.value.service
   };
   await v$.value.$validate();
-  console.log(v$.value);
 
   console.log(payload);
   if (!v$.value.$invalid) {
@@ -29,25 +27,19 @@ async function submit() {
   }
 }
 
-const { data } = await useFetch('/api/form-fields');
+const { data } = await useFetch<FormField[]>('/api/form-fields');
 
-const rules = computed(() => ({
-  name: {
-    required,
-    minLength: minLength(2)
-  },
-  email: {
-    required,
-    email
-  },
-  password: {
-    required,
-    minLength: minLength(8)
-  },
-  terms_and_conditions: { sameAs: sameAs(() => true) }
-}));
+const { rules } = useValidationRules(form.value);
 
-const v$ = useVuelidate(rules, form.value);
+function showHiddenField(field: FormField) {
+  if (field.parent && field.requiredIf) {
+    return form.value[field.parent] === field.requiredIf;
+  } else {
+    return false;
+  }
+}
+
+const v$ = useVuelidate<FormType>(rules, form.value);
 </script>
 
 <template>
@@ -61,9 +53,8 @@ const v$ = useVuelidate(rules, form.value);
           :key="field.name"
           v-model="form[field.name]"
           v-model:other-value="otherValue"
-          :label="field.label"
-          :type="field.type"
-          :required="field.required"
+          :field
+          :visible="field.visible ? field.visible : showHiddenField(field)"
           :error="v$[field.name]?.$errors[0]?.$message"
         />
       </form>

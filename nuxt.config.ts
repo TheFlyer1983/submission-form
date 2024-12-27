@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    'dayjs-nuxt'
   ],
   css: ['~/assets/css/main.pcss'],
   postcss: {

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-const modelValue = defineModel<string | boolean>();
-const otherValue = defineModel<string>('otherValue');
+import type { FormField } from '~~/shared/types';
 
-const props = defineProps<{
-  label: string;
-  type: string;
-  required: boolean;
+const modelValue = defineModel<string | boolean>();
+
+defineProps<{
+  field: FormField;
   error?: string;
+  visible: boolean;
 }>();
 
 const { data } = await useLazyFetch('/api/services');
@@ -16,23 +16,27 @@ const { data } = await useLazyFetch('/api/services');
   <div>
     <div
       v-if="
-        ['text', 'password', 'date'].includes(props.type) &&
-        typeof modelValue === 'string'
+        ['text', 'password', 'date'].includes(field.type) &&
+        typeof modelValue === 'string' &&
+        visible
       "
     >
-      <label
-        >{{ label }}: <span v-if="required" class="text-red-600">*</span></label
-      >
-      <UiInput v-model="modelValue" :type />
+      <label>
+        {{ field.label }}:
+        <span v-if="field.required" class="text-red-600">*</span>
+      </label>
+      <UiInput v-model="modelValue" :type="field.type" />
     </div>
     <div
       v-else-if="
-        ['select'].includes(props.type) && typeof modelValue === 'string'
+        ['select'].includes(field.type) &&
+        typeof modelValue === 'string' &&
+        visible
       "
       class="space-y-3"
     >
       <div>
-        <label> {{ label }}: <span v-if="required">*</span> </label>
+        <label> {{ field.label }}: <span v-if="field.required">*</span> </label>
         <UiSelect v-model="modelValue">
           <UiSelectTrigger>
             <UiSelectValue placeholder="Please select a service" />
@@ -50,19 +54,17 @@ const { data } = await useLazyFetch('/api/services');
           </UiSelectContent>
         </UiSelect>
       </div>
-      <div v-if="modelValue === 'other'">
-        <label>Other:</label>
-        <UiInput v-model="otherValue" />
-      </div>
     </div>
     <div
       v-else-if="
-        ['checkbox'].includes(props.type) && typeof modelValue === 'boolean'
+        ['checkbox'].includes(field.type) &&
+        typeof modelValue === 'boolean' &&
+        visible
       "
     >
       <UiCheckbox v-model:checked="modelValue" />
-      <label class="ml-2">{{ label }}</label>
+      <label class="ml-2">{{ field.label }}</label>
     </div>
-    <div class= text-red-500">{{ error }}</div>
+    <div class="text-red-500">{{ error }}</div>
   </div>
 </template>

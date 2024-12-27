@@ -23,6 +23,8 @@
     "@vueuse/core": "^12.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "dayjs-nuxt": "^2.1.11",
     "eslint": "^8.57.0 || ^9.0.0",
     "lucide-vue-next": "^0.469.0",
     "nuxt": "^3.14.1592",
