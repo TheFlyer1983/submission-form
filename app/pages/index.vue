@@ -14,15 +14,12 @@ const form = ref<FormType>({
 const otherValue = ref<string>();
 
 async function submit() {
-  const payload = {
-    ...form.value,
-  };
   await v$.value.$validate();
 
   if (!v$.value.$invalid) {
     await $fetch('/api/submit', {
       method: 'POST',
-      body: payload
+      body: form.value
     });
     navigateTo('/submitted');
   }
@@ -53,9 +50,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="!isLoading" class="flex flex-col items-center justify-center">
+  <div
+    v-if="!isLoading"
+    class="mt-4 flex flex-col items-center justify-center space-y-4"
+  >
     <!-- Todo: Heading Goes Here-->
-    Some Heading
+    <p class="text-4xl font-bold">Web Services Enrolment</p>
     <div class="flex w-[65%] flex-col items-center justify-center">
       <form class="space-y-3" novalidate @submit.prevent="submit">
         <FormField

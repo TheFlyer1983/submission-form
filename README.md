@@ -1,10 +1,10 @@
-# Nuxt Minimal Starter
+# Form Submission
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A small repo looking at adding Vuelidate into Nuxt and also using the ShadCN component library.
 
 ## Setup
 
-Make sure to install dependencies:
+Make sure to install dependencies I prefer to use `pnpm` but you can use other package management services:
 
 ```bash
 # npm
@@ -71,5 +71,3 @@ yarn preview
 # bun
 bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
