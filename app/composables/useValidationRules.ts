@@ -19,13 +19,11 @@ export const useValidationRules = () => {
   >({});
 
   function createValidationRules(fields: FormField[], form: FormType) {
-    console.log(fields);
     const mappedRules = fields.reduce(
       (
         acc: Record<string, Record<string, ValidationRuleWithParams>>,
         field
       ) => {
-        console.log(field, 'hello');
         return {
           ...acc,
           [field.name]: {

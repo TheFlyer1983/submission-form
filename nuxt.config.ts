@@ -31,5 +31,14 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './app/components/ui'
+  },
+
+  nitro: {
+    storage: {
+      data: {
+        driver: 'fs',
+        base: './.data/kv'
+      }
+    }
   }
 });

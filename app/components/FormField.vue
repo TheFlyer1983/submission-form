@@ -9,7 +9,11 @@ defineProps<{
   visible: boolean;
 }>();
 
-const { data } = await useLazyFetch('/api/services');
+const { data, execute } = useFetch('/api/services');
+
+onMounted(async () => {
+  await execute();
+});
 </script>
 
 <template>

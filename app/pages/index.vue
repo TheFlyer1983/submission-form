@@ -16,12 +16,14 @@ const otherValue = ref<string>();
 async function submit() {
   const payload = {
     ...form.value,
-    other:
-      form.value.service === 'other' ? otherValue.value : form.value.service
   };
   await v$.value.$validate();
 
   if (!v$.value.$invalid) {
+    await $fetch('/api/submit', {
+      method: 'POST',
+      body: payload
+    });
     navigateTo('/submitted');
   }
 }
