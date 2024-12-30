@@ -21,32 +21,40 @@ async function submit() {
   };
   await v$.value.$validate();
 
-  console.log(payload);
   if (!v$.value.$invalid) {
     navigateTo('/submitted');
   }
 }
 
-const { data } = await useFetch<FormField[]>('/api/form-fields');
+const { execute, data } = useFetch<FormField[]>('/api/form-fields');
 
-const { rules } = useValidationRules(form.value);
+const { rules, createValidationRules } = useValidationRules();
 
 function showHiddenField(field: FormField) {
-  if (field.parent && field.requiredIf) {
-    return form.value[field.parent] === field.requiredIf;
+  if (field.parent && field.validationRules.requiredIf) {
+    return form.value[field.parent] === field.validationRules.requiredIf;
   } else {
     return false;
   }
 }
 
+const { isLoading, start, finish } = useLoadingIndicator();
+
 const v$ = useVuelidate<FormType>(rules, form.value);
+
+onMounted(async () => {
+  start();
+  await execute();
+  if (data.value) createValidationRules(data.value, form.value);
+  finish();
+});
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div v-if="!isLoading" class="flex flex-col items-center justify-center">
     <!-- Todo: Heading Goes Here-->
     Some Heading
-    <div class="flex w-[65%] flex-col items-center justify-center border">
+    <div class="flex w-[65%] flex-col items-center justify-center">
       <form class="space-y-3" novalidate @submit.prevent="submit">
         <FormField
           v-for="field in data"
@@ -57,8 +65,8 @@ const v$ = useVuelidate<FormType>(rules, form.value);
           :visible="field.visible ? field.visible : showHiddenField(field)"
           :error="v$[field.name]?.$errors[0]?.$message"
         />
+        <UiButton class="self-start" @click="submit">Submit</UiButton>
       </form>
-      <UiButton class="self-start" @click="submit">Submit</UiButton>
     </div>
   </div>
 </template>

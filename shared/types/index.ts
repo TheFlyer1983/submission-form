@@ -6,7 +6,7 @@ export type ValidationRules = {
   isBefore?: boolean;
   containsNumber?: boolean;
   requiredIf?: string;
-  sameAs?: boolean;
+  checked?: boolean;
 }
 
 export type FormField = {

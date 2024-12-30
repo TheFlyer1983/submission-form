@@ -6,7 +6,7 @@ export default defineEventHandler(async () => {
       type: 'text',
       required: true,
       parent: null,
-      visible: true, 
+      visible: true,
       validationRules: {
         required: true,
         minLength: 2,
@@ -54,8 +54,7 @@ export default defineEventHandler(async () => {
       name: 'services',
       type: 'select',
       required: false,
-      visible: true,
-      validationRules: {}
+      visible: true
     },
     {
       label: 'Please specify',
@@ -76,7 +75,7 @@ export default defineEventHandler(async () => {
       parent: null,
       visible: true,
       validationRules: {
-        required: true
+        checked: true
       }
     }
   ];
