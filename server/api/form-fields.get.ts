@@ -1,7 +1,9 @@
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const { locale } = getQuery(event);
+
   return [
     {
-      label: 'Name',
+      label: locale === 'fr' ? 'Nom' : 'Name',
       name: 'name',
       type: 'text',
       required: true,
@@ -26,7 +28,7 @@ export default defineEventHandler(async () => {
       }
     },
     {
-      label: 'Password',
+      label: locale === 'fr' ? 'Mot de passe' : 'Password',
       name: 'password',
       type: 'password',
       required: true,
@@ -39,7 +41,7 @@ export default defineEventHandler(async () => {
       }
     },
     {
-      label: 'Date of Birth',
+      label: locale === 'fr' ? 'Date de naissance' : 'Date of Birth',
       name: 'date_of_birth',
       type: 'date',
       required: false,
@@ -57,7 +59,7 @@ export default defineEventHandler(async () => {
       visible: true
     },
     {
-      label: 'Please specify',
+      label: locale === 'fr' ? 'Veuillez préciser' : 'Please specify',
       name: 'services_other',
       type: 'text',
       required: true,
@@ -68,7 +70,10 @@ export default defineEventHandler(async () => {
       }
     },
     {
-      label: 'Please check this box to agree with our terms and conditions',
+      label:
+        locale === 'fr'
+          ? 'Veuillez cocher cette case pour accepter nos conditions générales'
+          : 'Please check this box to agree with our terms and conditions',
       name: 'terms_and_conditions',
       type: 'checkbox',
       required: true,

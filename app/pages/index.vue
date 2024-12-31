@@ -11,7 +11,6 @@ const form = ref<FormType>({
   services_other: '',
   terms_and_conditions: false
 });
-const otherValue = ref<string>();
 
 async function submit() {
   await v$.value.$validate();
@@ -25,7 +24,12 @@ async function submit() {
   }
 }
 
-const { execute, data } = useFetch<FormField[]>('/api/form-fields');
+const { setLocale, locale } = useI18n();
+const { execute, data } = useFetch<FormField[]>('/api/form-fields', {
+  immediate: false,
+  query: { locale },
+  watch: [locale]
+});
 
 const { rules, createValidationRules } = useValidationRules();
 
@@ -54,20 +58,26 @@ onMounted(async () => {
     v-if="!isLoading"
     class="mt-4 flex flex-col items-center justify-center space-y-4"
   >
+    <div class="flex space-x-4">
+      <UiButton @click="setLocale('en')">{{ $t('english') }}</UiButton>
+      <UiButton @click="setLocale('fr')">{{ $t('french') }}</UiButton>
+    </div>
+
     <!-- Todo: Heading Goes Here-->
-    <p class="text-4xl font-bold">Web Services Enrolment</p>
+    <p class="text-4xl font-bold">{{ $t('header') }}</p>
     <div class="flex w-[65%] flex-col items-center justify-center">
       <form class="space-y-3" novalidate @submit.prevent="submit">
         <FormField
           v-for="field in data"
           :key="field.name"
           v-model="form[field.name]"
-          v-model:other-value="otherValue"
           :field
           :visible="field.visible ? field.visible : showHiddenField(field)"
           :error="v$[field.name]?.$errors[0]?.$message"
         />
-        <UiButton class="self-start" @click="submit">Submit</UiButton>
+        <UiButton class="self-start" @click="submit">
+          {{ $t('submit') }}
+        </UiButton>
       </form>
     </div>
   </div>

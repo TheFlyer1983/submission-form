@@ -3,16 +3,38 @@ import type { FormField } from '~~/shared/types';
 
 const modelValue = defineModel<string | boolean>();
 
-defineProps<{
+const props = defineProps<{
   field: FormField;
   error?: string;
   visible: boolean;
 }>();
 
-const { data, execute } = useFetch('/api/services');
+const { locale } = useI18n();
+const { data } = useAsyncData<{ label: string; value: string }[]>(
+  () =>
+    $fetch('/api/services', {
+      params: { locale }
+    }),
+  {
+    watch: [locale]
+  }
+);
+
+const options = ref<{ label: string; value: string }[]>();
+
+watch(
+  data,
+  (newValue) => {
+    console.log(newValue);
+    options.value = newValue;
+  },
+  { immediate: true }
+);
 
 onMounted(async () => {
-  await execute();
+  if (props.field.type === 'select') {
+    // await execute();
+  }
 });
 </script>
 
@@ -43,12 +65,18 @@ onMounted(async () => {
         <label> {{ field.label }}: <span v-if="field.required">*</span> </label>
         <UiSelect v-model="modelValue">
           <UiSelectTrigger>
-            <UiSelectValue placeholder="Please select a service" />
+            <UiSelectValue
+              :placeholder="
+                locale === 'fr'
+                  ? 'Veuillez sélectionner un service'
+                  : 'Please select a service'
+              "
+            />
           </UiSelectTrigger>
           <UiSelectContent>
             <UiSelectGroup>
               <UiSelectItem
-                v-for="item in data"
+                v-for="item in options"
                 :key="item.value"
                 :value="item.value"
               >

@@ -1,19 +1,21 @@
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const { locale } = getQuery(event);
+
   return [
     {
-      label: 'Web Development',
+      label: locale === 'fr' ? 'Développement Web' : 'Web Development',
       value: 'web_development'
     },
     {
-      label: 'Mobile Development',
+      label: locale === 'fr' ? 'Développement mobile' : 'Mobile Development',
       value: 'mobile_development'
     },
     {
-      label: 'SEO Services',
+      label: locale === 'fr' ? 'Services de référencement' : 'SEO Services',
       value: 'seo_services'
     },
     {
-      label: 'Other',
+      label: locale === 'fr' ? 'Autre' : 'Other',
       value: 'other'
     }
   ];

@@ -12,7 +12,8 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
     '@nuxt/test-utils/module',
-    'dayjs-nuxt'
+    'dayjs-nuxt',
+    '@nuxtjs/i18n'
   ],
   css: ['~/assets/css/main.pcss'],
   postcss: {
@@ -31,6 +32,9 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './app/components/ui'
+  },
+  i18n: {
+    vueI18n: './i18n.config.ts' // if you are using custom path, default
   },
 
   nitro: {
