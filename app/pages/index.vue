@@ -74,6 +74,7 @@ onMounted(async () => {
           :field
           :visible="field.visible ? field.visible : showHiddenField(field)"
           :error="v$[field.name]?.$errors[0]?.$message"
+          :locale
         />
         <UiButton class="self-start" @click="submit">
           {{ $t('submit') }}

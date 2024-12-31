@@ -7,35 +7,22 @@ const props = defineProps<{
   field: FormField;
   error?: string;
   visible: boolean;
+  locale: string;
 }>();
-
-const { locale } = useI18n();
-const { data } = useAsyncData<{ label: string; value: string }[]>(
-  () =>
-    $fetch('/api/services', {
-      params: { locale }
-    }),
-  {
-    watch: [locale]
-  }
-);
 
 const options = ref<{ label: string; value: string }[]>();
 
 watch(
-  data,
-  (newValue) => {
-    console.log(newValue);
-    options.value = newValue;
+  () => props.locale,
+  async () => {
+    if (props.field.type === 'select') {
+      const data = await $fetch<{label: string, value: string}[]>('/api/services', { query: { locale: props.locale } });
+      options.value = structuredClone(data);
+    }
   },
   { immediate: true }
 );
 
-onMounted(async () => {
-  if (props.field.type === 'select') {
-    // await execute();
-  }
-});
 </script>
 
 <template>
