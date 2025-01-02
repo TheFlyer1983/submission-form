@@ -16,7 +16,9 @@ export default defineI18nConfig(() => ({
         containsNumber: '{property} must contain at least one number',
         requiredIf: '{property} is required',
         sameAs: 'You must check the box to continue'
-      }
+      },
+      success:
+        'Success! You have successfully submitted the form. All validations have passed.'
     },
     fr: {
       header: 'Inscription aux services Web',
@@ -32,7 +34,9 @@ export default defineI18nConfig(() => ({
         containsNumber: '{property} doit contenir au moins un chiffre',
         requiredIf: '{property} est requis',
         sameAs: 'Vous devez cocher la case pour continuer'
-      }
+      },
+      success:
+        'Succès! Vous avez soumis le formulaire avec succès. Toutes les validations ont réussi.'
     }
   }
 }));

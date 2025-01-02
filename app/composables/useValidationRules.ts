@@ -16,8 +16,10 @@ export const useValidationRules = () => {
     withArguments: true
   });
 
-  const containsNumber = () =>
-    withI18nMessage(validators.helpers.regex(() => /[0-9]{1,}/));
+  const containsNumbers = () =>
+    withI18nMessage((value: string) =>
+      value ? Boolean(value.match(/[0-9]{1,}/)) : false
+    );
 
   const isBefore = () =>
     withI18nMessage((value: string) =>
@@ -90,7 +92,7 @@ export const useValidationRules = () => {
                     ? {
                         containsNumber: helpers.withParams(
                           { property: field.label },
-                          containsNumber()
+                          containsNumbers()
                         )
                       }
                     : {}),

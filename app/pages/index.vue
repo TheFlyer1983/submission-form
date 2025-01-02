@@ -14,7 +14,7 @@ const form = ref<FormType>({
 
 async function submit() {
   await v$.value.$validate();
-  
+
   if (!v$.value.$invalid) {
     await $fetch('/api/submit', {
       method: 'POST',
@@ -23,8 +23,16 @@ async function submit() {
     navigateTo('/submitted');
   }
 }
-const data = ref<FormField[]>();
+
 const { setLocale, locale } = useI18n();
+
+const { data, status } = await useAsyncData<FormField[]>('items', () =>
+  $fetch('/api/form-fields', {
+    query: { locale: locale.value }
+  }), {
+    watch: [locale]
+  }
+);
 
 const { rules, createValidationRules } = useValidationRules();
 
@@ -36,20 +44,12 @@ function showHiddenField(field: FormField) {
   }
 }
 
-const { isLoading, start, finish } = useLoadingIndicator();
-
 const v$ = useVuelidate<FormType>(rules, form.value);
 
 watch(
-  locale,
+  data,
   async () => {
-    start();
-    const response = await $fetch<FormField[]>('/api/form-fields', {
-      query: { locale: locale.value }
-    });
-    data.value = response;
     if (data.value) createValidationRules(data.value, form.value);
-    finish();
   },
   { immediate: true }
 );
@@ -57,7 +57,7 @@ watch(
 
 <template>
   <div
-    v-if="!isLoading"
+    v-if="status === 'success'"
     class="mt-4 flex flex-col items-center justify-center space-y-4"
   >
     <div class="flex space-x-4">
