@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const { data } = await useFetch('/api/submission');
 
+const showSubmittedData = ref(false);
 </script>
 
 <template>
@@ -9,6 +10,12 @@ const { data } = await useFetch('/api/submission');
   >
     <p class="text-xl font-semibold">{{ $t('success') }}</p>
 
-    <pre>{{ data }}</pre>
+    <UiButton
+      @click="showSubmittedData = !showSubmittedData"
+    >
+      {{ $t(showSubmittedData ? 'hideSubmitted' : 'showSubmitted') }}
+    </UiButton>
+
+    <pre v-if="showSubmittedData">{{ data }}</pre>
   </div>
 </template>

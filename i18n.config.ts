@@ -18,7 +18,9 @@ export default defineI18nConfig(() => ({
         sameAs: 'You must check the box to continue'
       },
       success:
-        'Success! You have successfully submitted the form. All validations have passed.'
+        'Success! You have successfully submitted the form. All validations have passed.',
+      showSubmitted: 'Show submitted data',
+      hideSubmitted: 'Hide submitted data'
     },
     fr: {
       header: 'Inscription aux services Web',
@@ -36,7 +38,9 @@ export default defineI18nConfig(() => ({
         sameAs: 'Vous devez cocher la case pour continuer'
       },
       success:
-        'Succès! Vous avez soumis le formulaire avec succès. Toutes les validations ont réussi.'
+        'Succès! Vous avez soumis le formulaire avec succès. Toutes les validations ont réussi.',
+      showSubmitted: 'Afficher les données soumises',
+      hideSubmitted: 'Masquer les données soumises'
     }
   }
 }));
