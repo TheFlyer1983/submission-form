@@ -1,27 +1,52 @@
-import type { ValidationRuleWithParams } from '@vuelidate/core';
-import {
-  alpha,
-  minLength,
-  required,
-  email,
-  sameAs,
-  helpers,
-  requiredIf
-} from '@vuelidate/validators';
+import type {
+  ValidationRuleWithoutParams,
+  ValidationRuleWithParams
+} from '@vuelidate/core';
 import type { FormType } from '~~/shared/types';
+import * as validators from '@vuelidate/validators';
 
 export const useValidationRules = () => {
+  const { createI18nMessage, helpers } = validators;
+  const withI18nMessage = createI18nMessage({ t: useI18n().t });
+
+  const required = withI18nMessage(validators.required);
+  const email = withI18nMessage(validators.email);
+  const alpha = withI18nMessage(validators.alpha);
+  const minLength = withI18nMessage(validators.minLength, {
+    withArguments: true
+  });
+
+  const containsNumber = () =>
+    withI18nMessage(validators.helpers.regex(() => /[0-9]{1,}/));
+
+  const isBefore = () =>
+    withI18nMessage((value: string) =>
+      value ? dayjs(value).isBefore(dayjs()) : true
+    );
+
   const dayjs = useDayjs();
 
   const rules = ref<
-    | Record<string, Record<string, ValidationRuleWithParams>>
+    | Record<
+        string,
+        Record<
+          string,
+          ValidationRuleWithParams | ValidationRuleWithoutParams | unknown
+        >
+      >
     | Record<string, never>
   >({});
 
   function createValidationRules(fields: FormField[], form: FormType) {
     const mappedRules = fields.reduce(
       (
-        acc: Record<string, Record<string, ValidationRuleWithParams>>,
+        acc: Record<
+          string,
+          Record<
+            string,
+            ValidationRuleWithParams | ValidationRuleWithoutParams | unknown
+          >
+        >,
         field
       ) => {
         return {
@@ -31,76 +56,74 @@ export const useValidationRules = () => {
               ? {
                   ...(field.validationRules.required
                     ? {
-                        required: helpers.withMessage(
-                          `${field.label} is required`,
+                        required: helpers.withParams(
+                          { property: field.label },
                           required
                         )
                       }
                     : {}),
                   ...(field.validationRules.email
                     ? {
-                        email: helpers.withMessage(
-                          `${field.label} is invalid`,
+                        email: helpers.withParams(
+                          { property: field.label },
                           email
                         )
                       }
                     : {}),
                   ...(field.validationRules.alpha
                     ? {
-                        alpha: helpers.withMessage(
-                          `${field.label} is not alphabetical`,
+                        alpha: helpers.withParams(
+                          { property: field.label },
                           alpha
                         )
                       }
                     : {}),
                   ...(field.validationRules.minLength
                     ? {
-                        minLength: helpers.withMessage(
-                          `${field.label} must contain at least ${field.validationRules.minLength} characters`,
+                        minLength: helpers.withParams(
+                          { property: field.label },
                           minLength(field.validationRules.minLength)
                         )
                       }
                     : {}),
                   ...(field.validationRules.containsNumber
                     ? {
-                        containsNumber: helpers.withMessage(
-                          `${field.label} must contain a number`,
-                          helpers.regex(/[0-9]{1,}/)
+                        containsNumber: helpers.withParams(
+                          { property: field.label },
+                          containsNumber()
                         )
                       }
                     : {}),
                   ...(field.validationRules.isBefore
                     ? {
-                        isBefore: helpers.withMessage(
-                          'The date must be in the past',
-                          (value: string) =>
-                            value ? dayjs(value).isBefore(dayjs()) : true
+                        isBefore: helpers.withParams(
+                          { property: field.label },
+                          isBefore()
                         )
                       }
                     : {}),
                   ...(field.validationRules.requiredIf
                     ? {
-                        requiredIf: helpers.withMessage(
-                          `Please specify other value.`,
-                          requiredIf(() => {
-                            if (field.parent) {
-                              return (
-                                form[field.parent] ===
-                                field.validationRules.requiredIf
-                              );
-                            } else {
-                              return true;
-                            }
-                          })
+                        requiredIf: helpers.withParams(
+                          { property: field.label },
+                          withI18nMessage(
+                            validators.requiredIf(() => {
+                              if (field.parent) {
+                                return (
+                                  form[field.parent] ===
+                                  field.validationRules.requiredIf
+                                );
+                              } else {
+                                return true;
+                              }
+                            })
+                          )
                         )
                       }
                     : {}),
                   ...(field.validationRules.checked
                     ? {
-                        sameAs: helpers.withMessage(
-                          `You must check the box to continue.`,
-                          sameAs(true)
-                        )
+                        sameAs: withI18nMessage(validators.sameAs(true))
                       }
                     : {})
                 }

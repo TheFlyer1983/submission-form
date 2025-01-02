@@ -14,7 +14,7 @@ const form = ref<FormType>({
 
 async function submit() {
   await v$.value.$validate();
-
+  
   if (!v$.value.$invalid) {
     await $fetch('/api/submit', {
       method: 'POST',
@@ -23,13 +23,8 @@ async function submit() {
     navigateTo('/submitted');
   }
 }
-
+const data = ref<FormField[]>();
 const { setLocale, locale } = useI18n();
-const { execute, data } = useFetch<FormField[]>('/api/form-fields', {
-  immediate: false,
-  query: { locale },
-  watch: [locale]
-});
 
 const { rules, createValidationRules } = useValidationRules();
 
@@ -45,12 +40,19 @@ const { isLoading, start, finish } = useLoadingIndicator();
 
 const v$ = useVuelidate<FormType>(rules, form.value);
 
-onMounted(async () => {
-  start();
-  await execute();
-  if (data.value) createValidationRules(data.value, form.value);
-  finish();
-});
+watch(
+  locale,
+  async () => {
+    start();
+    const response = await $fetch<FormField[]>('/api/form-fields', {
+      query: { locale: locale.value }
+    });
+    data.value = response;
+    if (data.value) createValidationRules(data.value, form.value);
+    finish();
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
