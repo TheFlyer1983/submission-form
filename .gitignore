@@ -6,6 +6,9 @@
 .cache
 dist
 
+# testing outputs
+app/coverage
+
 # Node dependencies
 node_modules
 

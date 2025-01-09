@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FormField > when the field type is checkbox > should render correctly 1`] = `
+"<div>
+  <div><button class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" role="checkbox" type="button" aria-checked="true" aria-required="false" data-state="checked"><span data-state="checked" style="pointer-events: none;" class="flex h-full w-full items-center justify-center text-current"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon h-4 w-4"><path d="M20 6 9 17l-5-5"></path></svg></span></button>
+    <!----><label class="ml-2">Please check this box to agree with our terms and conditions</label>
+  </div>
+  <div class="text-red-500"></div>
+</div>"
+`;
+
+exports[`FormField > when the field type is date > should render correctly 1`] = `
+"<div>
+  <div><label>Date of Birth:
+      <!--v-if-->
+    </label><input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="date"></div>
+  <div class="text-red-500"></div>
+</div>"
+`;
+
+exports[`FormField > when the field type is select > should render correctly 1`] = `
+"<div>
+  <div class="space-y-3">
+    <div><label>Services:
+        <!--v-if-->
+      </label><button role="combobox" type="button" aria-controls="radix-vue-select-content-v-0-0-0" aria-expanded="false" aria-required="false" aria-autocomplete="none" dir="ltr" data-state="closed" class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:truncate text-start"><span style="pointer-events: none;"></span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon w-4 h-4 opacity-50 shrink-0" aria-hidden="true">
+          <path d="m6 9 6 6 6-6"></path>
+        </svg></button>
+      <!--teleport start-->
+      <!--teleport end--><select default-value="Paul" style="position: absolute; border: 0px; width: 1px; display: inline-block; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; word-wrap: normal;" aria-hidden="true" tabindex="-1" value="Paul"></select>
+    </div>
+  </div>
+  <div class="text-red-500"></div>
+</div>"
+`;
+
+exports[`FormField > when the field type is text > should render correctly 1`] = `
+"<div>
+  <div><label>Name: <span class="text-red-600">*</span></label><input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="text"></div>
+  <div class="text-red-500"></div>
+</div>"
+`;

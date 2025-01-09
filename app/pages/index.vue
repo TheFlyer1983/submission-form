@@ -37,7 +37,7 @@ const { data, status } = await useAsyncData<FormField[]>('items', () =>
 const { rules, createValidationRules } = useValidationRules();
 
 function showHiddenField(field: FormField) {
-  if (field.parent && field.validationRules.requiredIf) {
+  if (field.parent && field.validationRules?.requiredIf) {
     return form.value[field.parent] === field.validationRules.requiredIf;
   } else {
     return false;

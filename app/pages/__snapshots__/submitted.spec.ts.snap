@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`submitted > renders the submitted page 1`] = `
+"<div>
+  <div class="flex h-screen flex-col items-center justify-center space-y-4 border">
+    <p class="text-xl font-semibold">Success! You have successfully submitted the form. All validations have passed.</p><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2">Show submitted data</button>
+    <!--v-if-->
+  </div>
+</div>"
+`;

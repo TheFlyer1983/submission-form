@@ -14,10 +14,10 @@ export type FormField = {
   name: string;
   type: 'text' | 'password' | 'date' | 'select' | 'checkbox';
   required: boolean;
-  parent: string | null;
+  parent?: string | null;
   visible: boolean;
   requiredIf?: string;
-  validationRules: ValidationRules
+  validationRules?: ValidationRules
 };
 
 export type FormType = Record<string, string | boolean>;
